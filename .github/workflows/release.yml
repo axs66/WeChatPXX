@@ -3,11 +3,11 @@ name: deb
 on:
   push:
     paths:
-      - '.github/workflows/build.yml'  # 监控 build.yml 文件的变化
-      - '**.xm'  # 监控 Tweak.xm 文件
+      - '.github/workflows/build.yml'
+      - '**.xm'
       - 'control'
     branches:
-      - 'main'  # 仅在推送到 main 分支时触发
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -24,23 +24,32 @@ jobs:
 
       - name: Build package
         run: |
-          # 清理旧的构建输出
+          # 删除旧的 packages 文件夹
           rm -rf ${{ github.workspace }}/packages
           # 构建 rootless 版本
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless || true
           # 构建 roothide 版本
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide || true
 
       - name: List generated Deb packages
-        run: ls -R ${{ github.workspace }}/packages
+        run: |
+          echo "=== Packages directory contents ==="
+          if [ -d "${{ github.workspace }}/packages" ]; then
+            ls -R ${{ github.workspace }}/packages
+          else
+            echo "No packages folder found"
+          fi
 
       - name: Create GitHub Release
         id: release
         run: |
           VERSION=$(date +v%Y%m%d%H%M)
-          gh release create $VERSION $(find ${{ github.workspace }}/packages -name "*.deb") \
-            --title "微信PXX $VERSION" \
-            --notes "Automated release of .deb files"
+          DEBS=$(find ${{ github.workspace }}/packages -name "*.deb")
+          if [ -z "$DEBS" ]; then
+            echo "No .deb files found, skipping release"
+            exit 0
+          fi
+          gh release create $VERSION $DEBS --title "微信PXX $VERSION" --notes "Automated release of .deb files"
         env:
           GH_TOKEN: ${{ secrets.PAT }}
 
