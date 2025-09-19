@@ -1,0 +1,11 @@
+Package: com.wechat.pxx917144686
+Name: WeChat
+Version: 0.0.3
+Architecture: iphoneos-arm64
+Description: WeChat++ - 用Swift+ObjC混合架构，Apple风格UI
+Homepage: https://github.com/wechat
+Depends: firmware (>= 15.0), mobilesubstrate, preferenceloader
+Maintainer: pxx917144686
+Author: WeChat++
+Section: Tweaks
+Tag: purpose::extension, compatible::ios15+
