@@ -3,11 +3,11 @@ name: deb
 on:
   push:
     paths:
-      - '.github/workflows/build.yml'
-      - '**.xm'
+      - '.github/workflows/build.yml'  # 监控 build.yml 文件的变化
+      - '**.xm'  # 增加对 Tweak.xm 文件的监控
       - 'control'
     branches:
-      - 'main'
+      - 'main'  # 仅在推送到 main 分支时触发
   workflow_dispatch:
 
 jobs:
@@ -20,29 +20,27 @@ jobs:
           submodules: true
 
       - name: Prepare Theos
-        uses: axs66/theos-action1@main
+        uses: axs66/theos-action@main
 
       - name: Build package
         run: |
-          # 删除旧的 packages 文件夹
-          rm -rf ${{ github.workspace }}/packages
-          # 构建 rootless 版本
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless || true
-          # 构建 roothide 版本
-          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide || true
+          rm -f ${{ github.workspace }}/packages/*.deb
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide
 
       - name: List generated Deb packages
-        run: |
-          echo "=== Packages directory contents ==="
-          if [ -d "${{ github.workspace }}/packages" ]; then
-            ls -R ${{ github.workspace }}/packages
-          else
-            echo "No packages folder found"
-          fi
+        run: ls ${{ github.workspace }}/packages
 
+      - name: Create GitHub Release
+        id: release
+        run: |
+          VERSION=$(date +v%Y%m%d%H%M)
+          gh release create $VERSION ${{ github.workspace }}/packages/*.deb --title "微信PXX $VERSION" --notes "Automated release of .deb files"
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}  # 这里设置了 GitHub Token 用于授权
 
       - name: Upload specific Deb packages
         uses: actions/upload-artifact@v4.3.3
         with:
           name: 微信PXX
-          path: ${{ github.workspace }}/packages/**/*.deb
+          path: ${{ github.workspace }}/packages/*.deb
