@@ -41,7 +41,7 @@
 @property (nonatomic, strong) UIView *separatorLine;
 
 // 胶囊按钮相关
-@property (nonatomic, strong) UIScrollView *scrollView;
+// @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *capsuleContainer;
 @property (nonatomic, strong) NSMutableArray *capsuleButtons;
 @property (nonatomic, strong) UILabel *capsuleLabel;
