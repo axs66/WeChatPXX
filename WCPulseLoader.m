@@ -102,7 +102,9 @@
         }
         
         // 初始化Config
-        [Config sharedConfig];
+        WeChatSessionMgr *mgr = [WeChatSessionMgr sharedInstance];
+        NSMutableDictionary *groups = [mgr groupList];
+
         
         NSLog(@"[WCPulseLoader] 核心组件初始化完成");
         
