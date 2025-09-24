@@ -1,3 +1,31 @@
+# 插件基本信息
+PACKAGE_IDENTIFIER = com.wechat.pxx917144686
+PACKAGE_NAME = WeChat
+PACKAGE_VERSION = 0.0.4
+PACKAGE_ARCHITECTURE = iphoneos-arm64
+PACKAGE_REVISION = 1
+PACKAGE_SECTION = Tweaks
+PACKAGE_DEPENDS = firmware (>= 15.0), mobilesubstrate, preferenceloader
+PACKAGE_DESCRIPTION = WeChat++ - 微信增强插件，提供分组管理、界面优化等功能
+
+# 插件包定义
+define Package/WeChat
+  Package: com.wechat.pxx917144686
+  Name: WeChat
+  Version: 0.0.4
+  Architecture: iphoneos-arm64
+  Author: WeChat++
+  Section: Tweaks
+  Depends: firmware (>= 15.0), mobilesubstrate, preferenceloader
+  Description: WeChat++ - 微信增强插件，提供分组管理、界面优化
+  Homepage: https://github.com/wechat
+  Maintainer: WeChat++
+  Tag: purpose::extension, compatible::ios15+
+endef
+
+# 直接输出到根路径
+export THEOS_PACKAGE_DIR = $(CURDIR)
+
 ARCHS = arm64
 TARGET = iphone:clang:latest:15.0
 

@@ -10,9 +10,6 @@
 
 @interface Config : NSObject
 
-/// 单例访问入口
-+ (instancetype)sharedConfig;
-
 /**
  * 获取分组过滤列表
  * @return 分组过滤数组

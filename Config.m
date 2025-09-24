@@ -14,17 +14,7 @@
 @end
 
 @implementation Config
-
 static NSMutableDictionary *_configDict = nil;
-
-+ (instancetype)sharedConfig {
-    static Config *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
 
 + (void)initialize {
     if (self == [Config class]) {
@@ -54,16 +44,13 @@ static NSMutableDictionary *_configDict = nil;
     [_configDict setObject:filterList forKey:@"groupFilterList"];
     [self saveConfigDictionary:_configDict];
 }
-
 @end
-
 
 // WeChatSessionMgr - 分组会话管理器
 @interface WeChatSessionMgr ()
 @end
 
 @implementation WeChatSessionMgr
-
 static WeChatSessionMgr *_sessionMgrInstance = nil;
 
 + (instancetype)sharedInstance {
@@ -106,5 +93,4 @@ static WeChatSessionMgr *_sessionMgrInstance = nil;
     }
     return _groupList;
 }
-
 @end
