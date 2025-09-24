@@ -1,10 +1,3 @@
-//
-//  FloatingTagCell.m
-//  WeChat
-//
-//  Created by Assistant on 2024/12/16.
-//
-
 #import "FloatingTagCell.h"
 #import "MainLayoutManager.h"
 #import <Foundation/Foundation.h>
@@ -23,8 +16,12 @@
         [self setupUI];
         [self setupConstraints];
         
-        // 初始化默认状态
-        self.capsuleStates = @[@"默认", @"状态1", @"状态2"];
+        // 初始化默认状态（字典数组）
+        self.capsuleStates = @[
+            @{@"title": @"默认"},
+            @{@"title": @"状态1"},
+            @{@"title": @"状态2"}
+        ];
         self.selectedIndex = 0;
         self.isVisible = NO;
         
@@ -34,33 +31,19 @@
 }
 
 - (void)setupUI {
-    // 创建容器视图
     self.containerView = [[NSObject alloc] init];
-    
-    // 创建滚动视图
     self.scrollView = [[NSObject alloc] init];
-    
-    // 创建内容视图
     self.contentView = [[NSObject alloc] init];
-    
-    // 初始化胶囊视图数组
     self.capsuleViews = [[NSMutableArray alloc] init];
-    
-    // 添加点击手势
     self.tapGesture = [[NSObject alloc] init];
 }
 
 - (void)setupConstraints {
     // 禁用自动布局转换
-    // self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
-    // self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    // self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    // 刷新胶囊视图布局
     [self createCapsuleViews];
 }
 
@@ -71,10 +54,8 @@
         _selectedIndex = selectedIndex;
         [self refreshAppearance];
         
-        // 通知代理状态改变
         if ([self.delegate respondsToSelector:@selector(floatingTagCell:didChangeToState:)]) {
-            NSString *currentState = self.capsuleStates[selectedIndex];
-            NSDictionary *stateDict = @{@"title": currentState, @"index": @(selectedIndex)};
+            NSDictionary *stateDict = self.capsuleStates[selectedIndex];
             [self.delegate floatingTagCell:self didChangeToState:stateDict];
         }
         
@@ -125,7 +106,8 @@
     CGFloat totalWidth = 0;
     
     for (NSInteger i = 0; i < self.capsuleStates.count; i++) {
-        NSString *stateTitle = self.capsuleStates[i];
+        NSDictionary *stateDict = self.capsuleStates[i];
+        NSString *stateTitle = stateDict[@"title"];
         
         id capsuleView = [[NSObject alloc] init];
         id titleLabel = [[NSObject alloc] init];
@@ -134,7 +116,8 @@
         totalWidth += capsuleWidth + spacing;
     }
     
-    // self.scrollView.contentSize = CGSizeMake(totalWidth - spacing, capsuleHeight);
+    // 使用 totalWidth，消除未使用警告
+    self.scrollView.contentSize = CGSizeMake(totalWidth - spacing, capsuleHeight);
 }
 
 - (void)performShowAnimation {
