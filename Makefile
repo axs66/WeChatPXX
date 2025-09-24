@@ -24,7 +24,7 @@ define Package/WeChat
 endef
 
 # 直接输出到根路径
-export THEOS_PACKAGE_DIR = $(CURDIR)
+export THEOS_PACKAGE_DIR = $(CURDIR)/packages
 
 ARCHS = arm64
 TARGET = iphone:clang:latest:15.0
