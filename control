@@ -1,6 +1,6 @@
 Package: com.wechat.pxx917144686
 Name: WeChat
-Version: 0.0.3
+Version: 0.0.4
 Architecture: iphoneos-arm64
 Description: WeChat++ - 用Swift+ObjC混合架构，Apple风格UI
 Homepage: https://github.com/wechat
